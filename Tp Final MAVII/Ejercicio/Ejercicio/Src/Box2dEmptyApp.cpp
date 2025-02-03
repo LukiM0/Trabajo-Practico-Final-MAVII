@@ -22,7 +22,7 @@ public:
         wnd = _wnd;
         _image = new Texture();
         // Cargamos la imagen de la pelota desde un archivo
-        _image->loadFromFile("Pelota.png");
+        _image->loadFromFile("barrel.png");
         // Cargamos el sprite con la imagen cargada
         _sprite = new Sprite(*_image);
 

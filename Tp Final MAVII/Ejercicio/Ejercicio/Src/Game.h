@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include "SFMLRenderer.h"
+#include "Avatar.h"
 #include <list>
 
 using namespace sf;
@@ -35,6 +36,9 @@ private:
 	String msg; //MENSAJE PRUEBA
 
 	float bodyY;
+	float densidad;
+	float friccion;
+	float restitucion;
 
 	float level;
 
@@ -47,6 +51,18 @@ private:
 
 	Text controles;
 
+	//Avatar one;
+
+	//b2Body* oneb;
+	
+	Texture BarrilTextura;
+	Texture CanonTextura;
+
+	Avatar* CanonAvatar;
+	Avatar* BarrrilAvatar1;
+	Avatar* BarrrilAvatar2;
+	Avatar* BarrrilAvatar3;
+	Avatar* BarrrilAvatar4;
 
 public:
 	//Constructores, destructores e inicializadores
@@ -63,4 +79,5 @@ public:
 	void DoEvents();
 	void SetZoom();
 	void CheckPositions();
+	void PreGame();
 };

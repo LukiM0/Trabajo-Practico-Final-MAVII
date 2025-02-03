@@ -19,11 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Src\Avatar.h" />
+    <ClInclude Include="..\Src\b2ExSoftCircleBody.h" />
     <ClInclude Include="..\Src\Box2DHelper.h" />
     <ClInclude Include="..\Src\Game.h" />
     <ClInclude Include="..\Src\SFMLRenderer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Src\Avatar.cpp" />
+    <ClCompile Include="..\Src\b2ExSoftCircleBody.cpp" />
     <ClCompile Include="..\Src\Box2dEmptyApp.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
