@@ -3,6 +3,5 @@ C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.3351
 C:\Users\pedro\Desktop\Tp Final MAVII\Ejercicio\Ejercicio\Src\Game.cpp(29,9): warning C4996: 'sf::Text::setColor': se declaró desusado
 C:\Users\pedro\Desktop\Tp Final MAVII\Ejercicio\Ejercicio\Src\Game.cpp(32,6): warning C4996: 'sf::Text::setColor': se declaró desusado
 C:\Users\pedro\Desktop\Tp Final MAVII\Ejercicio\Ejercicio\Src\Game.cpp(35,11): warning C4996: 'sf::Text::setColor': se declaró desusado
-C:\Users\pedro\Desktop\Tp Final MAVII\Ejercicio\Ejercicio\Src\Game.cpp(88,94): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\pedro\Desktop\Tp Final MAVII\Ejercicio\Ejercicio\Src\Game.cpp(306,40): warning C4305: 'argumento': truncamiento de 'double' a 'float'
+C:\Users\pedro\Desktop\Tp Final MAVII\Ejercicio\Ejercicio\Src\Game.cpp(382,40): warning C4305: 'argumento': truncamiento de 'double' a 'float'
   Box2dResortes.vcxproj -> C:\Users\pedro\Desktop\Tp Final MAVII\Ejercicio\Ejercicio\Bin\Debug\Box2dResortes.exe

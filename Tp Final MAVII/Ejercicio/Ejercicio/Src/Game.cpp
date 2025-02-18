@@ -40,6 +40,19 @@ Game::Game(int ancho, int alto, std::string titulo)
 
 	BarrilTextura.loadFromFile("barrel.png");	//CARGA LA TEXTURA DEL BARRIL
 
+	BoneTextura.loadFromFile("bone.png");
+
+	BodyTextura.loadFromFile("body.png");
+	
+	HeadTextura.loadFromFile("head.png");
+
+	WallTextura.loadFromFile("wall.png");
+	WallRotTextura.loadFromFile("wallrot.png");
+
+	BallTextura.loadFromFile("ball.png");
+
+	shot = 0;
+
 	InitPhysics(); // Inicializa la simulación de física
 }
 
@@ -82,10 +95,10 @@ void Game::UpdatePhysics()
 void Game::DrawGame()
 {
 	// Función para dibujar los elementos del juego (a implementar)
-	sf::RectangleShape controlador(Vector2f(3, 10));
+	sf::RectangleShape controlador(Vector2f(1, 1));
 	if (level > 0 && level < 3.5) {
-		controlador.setFillColor(sf::Color::Magenta);
-		controlador.setPosition(controlCannon->GetPosition().x + 5, controlCannon->GetPosition().y - 4.9);
+		//controlador.setFillColor(sf::Color::Magenta);
+		controlador.setPosition(controlCannon->GetPosition().x, controlCannon->GetPosition().y);
 		controlador.setRotation(90);
 		wnd->draw(controlador);
 		controlCannon->SetTransform(b2Vec2(controlCannon->GetPosition().x, bodyY), 0.0f);
@@ -93,19 +106,67 @@ void Game::DrawGame()
 
 		CanonAvatar->Actualizar();
 		CanonAvatar->Dibujar(*wnd);
-
 		BarrrilAvatar1->Actualizar();
 		BarrrilAvatar1->Dibujar(*wnd);
-
 		BarrrilAvatar2->Actualizar();
 		BarrrilAvatar2->Dibujar(*wnd);
-
 		BarrrilAvatar3->Actualizar();
 		BarrrilAvatar3->Dibujar(*wnd);
-
 		BarrrilAvatar4->Actualizar();
 		BarrrilAvatar4->Dibujar(*wnd);
 
+		WallAvatar1->Actualizar();
+		WallAvatar1->Dibujar(*wnd);
+		WallAvatar2->Actualizar();
+		WallAvatar2->Dibujar(*wnd);
+		WallAvatar3->Actualizar();
+		WallAvatar3->Dibujar(*wnd);
+		WallAvatar4->Actualizar();
+		WallAvatar4->Dibujar(*wnd);
+
+		if (shot == 1)
+		{
+			bone1->Actualizar();
+			bone1->Dibujar(*wnd);
+			bone2->Actualizar();
+			bone2->Dibujar(*wnd);
+			bone3->Actualizar();
+			bone3->Dibujar(*wnd);
+			bone4->Actualizar();
+			bone4->Dibujar(*wnd);
+			bodyAvatar->Actualizar();
+			bodyAvatar->Dibujar(*wnd);
+			headAvatar->Actualizar();
+			headAvatar->Dibujar(*wnd);
+		}
+
+		if (level == 2)
+		{
+			CircleAvatar1->Actualizar();
+			CircleAvatar1->Dibujar(*wnd);
+			CircleAvatar2->Actualizar();
+			CircleAvatar2->Dibujar(*wnd);
+		}
+
+		if (level == 3)
+		{
+			OrbAvatar->Actualizar();
+			OrbAvatar->Dibujar(*wnd);
+			OrbAvatar1->Actualizar();
+			OrbAvatar1->Dibujar(*wnd);
+			OrbAvatar2->Actualizar();
+			OrbAvatar2->Dibujar(*wnd);
+			OrbAvatar3->Actualizar();
+			OrbAvatar3->Dibujar(*wnd);
+			OrbAvatar4->Actualizar();
+			OrbAvatar4->Dibujar(*wnd);
+			OrbAvatar5->Actualizar();
+			OrbAvatar5->Dibujar(*wnd);
+			CircleAvatar1->Actualizar();
+			CircleAvatar1->Dibujar(*wnd);
+			CircleAvatar2->Actualizar();
+			CircleAvatar2->Dibujar(*wnd);
+		}
 	}
 	
 	wnd->draw(counter);
@@ -155,7 +216,9 @@ void Game::DoEvents()
 			wnd->close(); // Cerrar la ventana si se presiona el botón de cerrar
 			break;
 			case Event::MouseButtonPressed: //RAGDOLLS CON CLICK
-			    Vector2f pos = wnd->mapPixelToCoords(Vector2i(evt.mouseButton.x, evt.mouseButton.y));
+
+			shot = 1;
+			Vector2f pos = wnd->mapPixelToCoords(Vector2i(evt.mouseButton.x, evt.mouseButton.y));
 			ragdolls += 1;
 
 			densidad = 100;
@@ -167,6 +230,7 @@ void Game::DoEvents()
 
 			b2Body* rightLeg = Box2DHelper::CreateRectangularDynamicBody(phyWorld, 1, 4.5, densidad, 0.5f, 0.1f); //PIERNA DERECHA
 			rightLeg->SetTransform(b2Vec2(16.5f, bodyY + 4.5f), 0.0f);
+			
 
 			Box2DHelper::CreateDistanceJoint(phyWorld, chest, chest->GetWorldCenter() + b2Vec2(1.2f, 2.25f),
 				rightLeg, rightLeg->GetWorldCenter() - b2Vec2(0.0f, 2.5f), 0.01f, 0.1f, 1.0f);
@@ -198,12 +262,20 @@ void Game::DoEvents()
 			Box2DHelper::CreateDistanceJoint(phyWorld, chest, chest->GetWorldCenter() + b2Vec2(0.0f, -2.5f), 
 				head, head->GetWorldCenter(), 0.0f, 0.1f, 1.0f);
 
-			
+			bone1 = new Avatar(rightLeg, new Sprite(BoneTextura));
+			bone2 = new Avatar(leftLeg, new Sprite(BoneTextura));
+			bone3 = new Avatar(rightArm, new Sprite(BoneTextura));
+			bone4 = new Avatar(leftArm, new Sprite(BoneTextura));
+
+			bodyAvatar = new Avatar(chest, new Sprite(BodyTextura));
+			headAvatar = new Avatar(head, new Sprite(HeadTextura));
+
 			chest->SetAwake(true);
 			//controlBody->ApplyForceToCenter(b2Vec2(pos.x * 3000000.0f, pos.x * 3000000.0f), true);
 			chest->SetLinearVelocity(b2Vec2( 300.0f, 0.0f));
 			    break;
 		}
+
 	}
 
 	
@@ -229,10 +301,10 @@ void Game::InitPhysics()
 	// Inicializa el mundo de Box2D con una gravedad hacia abajo
 	phyWorld = new b2World(b2Vec2(0.0f, 9.8f));
 
-	debugRender = new SFMLRenderer(wnd); // Crea un renderizador de debug para SFML
-	debugRender->SetFlags(UINT_MAX); // Configura el renderizador para dibujar todas las formas de debug
+	debugRender = new SFMLRenderer(wnd); // Crea un renderizador de debug para 
+	debugRender->SetFlags(0x0003); // Configura el renderizador para dibujar todas las formas de debug
 	phyWorld->SetDebugDraw(debugRender); // Establece el renderizador de debug para el mundo de Box2D
-
+	
 
 	if (level == -1) { // PANTALLA DE INICIO
 		counter.setString("Ragdoll VS Barrels");
@@ -282,6 +354,10 @@ void Game::InitPhysics()
 		b2Body* topWallBody = Box2DHelper::CreateRectangularStaticBody(phyWorld, 200, 10);
 		topWallBody->SetTransform(b2Vec2(50.0f, -50.0f), 0.0f);
 
+		WallAvatar1 = new Avatar(groundBody, new Sprite(WallRotTextura)); 
+		WallAvatar2 = new Avatar(leftWallBody, new Sprite(WallTextura));
+		WallAvatar3 = new Avatar(rightWallBody, new Sprite(WallTextura));
+		WallAvatar4 = new Avatar(topWallBody, new Sprite(WallRotTextura));
 
 		
 
@@ -352,6 +428,8 @@ void Game::InitPhysics()
 			b2Body* obs9 = Box2DHelper::CreateRectangularStaticBody(phyWorld, 2, 10);
 			obs9->SetTransform(b2Vec2(60.0f, 80.0f), 0.0f);
 			
+
+
 			b2Body* circle = Box2DHelper::CreateCircularDynamicBody(phyWorld, 3, 5, 1.0f, 0.5f);
 			b2Vec2 center = b2Vec2(45.0f, 65.0f);
 			circle->SetTransform(center, 0.0f);
@@ -419,6 +497,9 @@ void Game::InitPhysics()
 			BarrrilAvatar2 = new Avatar(barrel2, new Sprite(BarrilTextura));
 			BarrrilAvatar3 = new Avatar(barrel3, new Sprite(BarrilTextura));
 			BarrrilAvatar4 = new Avatar(barrel4, new Sprite(BarrilTextura));
+
+			CircleAvatar1 = new Avatar(circle, new Sprite(BallTextura));
+			CircleAvatar2 = new Avatar(circle2, new Sprite(BallTextura));
 		}
 		
 		if (level == 3) //NIVEL 3
@@ -426,8 +507,8 @@ void Game::InitPhysics()
 
 			//OBSTACULOS
 			
-			b2Body* obs = Box2DHelper::CreateRectangularStaticBody(phyWorld, 3, 43);
-			obs->SetTransform(b2Vec2(100.0f, 0.0f), 0.0f);
+			b2Body* obs = Box2DHelper::CreateRectangularStaticBody(phyWorld, 3, 100);
+			obs->SetTransform(b2Vec2(100.0f, 29.0f), 0.0f);
 			
 			b2Body* obs1 = Box2DHelper::CreateRectangularStaticBody(phyWorld, 3, 10);
 			obs1->SetTransform(b2Vec2(100.0f, -40.0f), 0.0f);
@@ -448,27 +529,27 @@ void Game::InitPhysics()
 			obs6->SetTransform(b2Vec2(90.0f, 130.0f), 0.0f);
 
 			
-			b2Body* orb = Box2DHelper::CreateCircularDynamicBody(phyWorld, 3, 1000, 0.0f, 30.0f);
+			orb = Box2DHelper::CreateCircularDynamicBody(phyWorld, 3, 1000, 0.0f, 30.0f);
 			orb->SetTransform(b2Vec2(25.0f, 140.0f), 0.0f);
 			orb->SetLinearVelocity(b2Vec2(0.0f, 200.0f));
-
-			b2Body* orb1 = Box2DHelper::CreateCircularDynamicBody(phyWorld, 3, 1000, 0.0f, 30.0f);
+			
+			orb1 = Box2DHelper::CreateCircularDynamicBody(phyWorld, 3, 1000, 0.0f, 30.0f);
 			orb1->SetTransform(b2Vec2(35.0f, -20.0f), 0.0f);
 			orb1->SetLinearVelocity(b2Vec2(0.0f, -200.0f));
 
-			b2Body* orb2 = Box2DHelper::CreateCircularDynamicBody(phyWorld, 3, 1000, 0.0f, 30.0f);
+			orb2 = Box2DHelper::CreateCircularDynamicBody(phyWorld, 3, 1000, 0.0f, 30.0f);
 			orb2->SetTransform(b2Vec2(45.0f, 140.0f), 0.0f);
 			orb2->SetLinearVelocity(b2Vec2(0.0f, 200.0f));
 
-			b2Body* orb3 = Box2DHelper::CreateCircularDynamicBody(phyWorld, 3, 1000, 0.0f, 30.0f);
+			orb3 = Box2DHelper::CreateCircularDynamicBody(phyWorld, 3, 1000, 0.0f, 30.0f);
 			orb3->SetTransform(b2Vec2(55.0f, -20.0f), 0.0f);
 			orb3->SetLinearVelocity(b2Vec2(0.0f, -200.0f));
 
-			b2Body* orb4 = Box2DHelper::CreateCircularDynamicBody(phyWorld, 3, 1000, 0.0f, 30.0f);
+			orb4 = Box2DHelper::CreateCircularDynamicBody(phyWorld, 3, 1000, 0.0f, 30.0f);
 			orb4->SetTransform(b2Vec2(65.0f, 140.0f), 0.0f);
 			orb4->SetLinearVelocity(b2Vec2(0.0f, 200.0f));
 
-			b2Body* orb5 = Box2DHelper::CreateCircularDynamicBody(phyWorld, 3, 1000, 0.0f, 30.0f);
+			orb5 = Box2DHelper::CreateCircularDynamicBody(phyWorld, 3, 1000, 0.0f, 30.0f);
 			orb5->SetTransform(b2Vec2(75.0f, -20.0f), 0.0f);
 			orb5->SetLinearVelocity(b2Vec2(0.0f, -200.0f));
 
@@ -476,11 +557,24 @@ void Game::InitPhysics()
 			circle->SetTransform(b2Vec2(-45.0f, -30.0f), 0.0f);
 			Box2DHelper::CreateDistanceJoint(phyWorld, leftWallBody, b2Vec2(-50.0f, 50.0f), circle, circle->GetWorldCenter(), 20.0f, 100.0f, 100.0f);
 			circle->SetLinearVelocity(b2Vec2(100.0f, 0.0f));
+			b2Body* pebble = Box2DHelper::CreateCircularDynamicBody(phyWorld, 2, 1000.0f, 0.0f, 10.0f);
+			pebble->SetTransform(b2Vec2(-30.0f, -30.0f), 0.0f);
+			b2Body* pebble1 = Box2DHelper::CreateCircularDynamicBody(phyWorld, 2, 1000.0f, 0.0f, 10.0f);
+			pebble1->SetTransform(b2Vec2(-25.0f, -30.0f), 0.0f);
+			Box2DHelper::CreateRevoluteJoint(phyWorld, circle, circle->GetWorldCenter() + b2Vec2(5.0f, 0.0f), pebble, 1.0f, 350.0f, 1000.0f, 100.0f, true, true);
+			Box2DHelper::CreateRevoluteJoint(phyWorld, circle, circle->GetWorldCenter() + b2Vec2(-5.0f, 0.0f), pebble1, 1.0f, 350.0f, 1000.0f, 100.0f, true, true);
+
 
 			b2Body* circle2 = Box2DHelper::CreateCircularDynamicBody(phyWorld, 3, 1000.0f, 0.0f, 10.0f);
 			circle2->SetTransform(b2Vec2(-40.0f, 140.0f), 0.0f);
 			Box2DHelper::CreateDistanceJoint(phyWorld, leftWallBody, b2Vec2(-50.0f, 50.0f), circle2, circle2->GetWorldCenter(), 30.0f, 100.0f, 100.0f);
 			circle2->SetLinearVelocity(b2Vec2(0.0f, 100.0f));
+			b2Body* pebble2 = Box2DHelper::CreateCircularDynamicBody(phyWorld, 2, 1000.0f, 0.0f, 10.0f);
+			pebble2->SetTransform(b2Vec2(-25.0f, 140.0f), 0.0f);
+			b2Body* pebble3 = Box2DHelper::CreateCircularDynamicBody(phyWorld, 2, 1000.0f, 0.0f, 10.0f);
+			pebble3->SetTransform(b2Vec2(-20.0f, 140.0f), 0.0f);
+			Box2DHelper::CreateRevoluteJoint(phyWorld, circle2, circle2->GetWorldCenter() + b2Vec2(5.0f, 0.0f), pebble2, 1.0f, 350.0f, 1000.0f, 100.0f, true, true);
+			Box2DHelper::CreateRevoluteJoint(phyWorld, circle2, circle2->GetWorldCenter() + b2Vec2(-5.0f, 0.0f), pebble3, 1.0f, 350.0f, 1000.0f, 100.0f, true, true);
 
 			//PLATAFORMAS
 
@@ -526,7 +620,16 @@ void Game::InitPhysics()
 			BarrrilAvatar3 = new Avatar(barrel3, new Sprite(BarrilTextura));
 			BarrrilAvatar4 = new Avatar(barrel4, new Sprite(BarrilTextura));
 
-			
+			OrbAvatar = new Avatar(orb, new Sprite(BallTextura));
+			OrbAvatar1 = new Avatar(orb1, new Sprite(BallTextura));
+			OrbAvatar2 = new Avatar(orb2, new Sprite(BallTextura));
+			OrbAvatar3 = new Avatar(orb3, new Sprite(BallTextura));
+			OrbAvatar4 = new Avatar(orb4, new Sprite(BallTextura));
+			OrbAvatar5 = new Avatar(orb5, new Sprite(BallTextura));
+
+			CircleAvatar1 = new Avatar(circle, new Sprite(BallTextura));
+			CircleAvatar2 = new Avatar(circle2, new Sprite(BallTextura));
+
 		}
 		
 	}
